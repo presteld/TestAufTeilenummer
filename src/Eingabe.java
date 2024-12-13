@@ -26,17 +26,49 @@ public class Eingabe {
                     taAusgabe.append("\n\n   OK");
 
                 }
-
-
-
             }
         });
     }
 
-
-
-
     public boolean pruefeTeileNr(String sTeileNr) {
+
+    try {
+        if( !  (sTeileNr.length()  == 10) )
+            throw new TeilenummerException(sTeileNr,"\n\nDie Länger der Teilenummer passt nicht\nAktuelle Länge: "+ sTeileNr.length());
+
+        if(   (sTeileNr.startsWith("0")) )
+            throw new TeilenummerException(sTeileNr,"\n\nDie Teilenummer  " + sTeileNr+"  startet mit einer 0");
+
+
+        int[]zifferAnzahl = new int[10];
+        char[] ziffern = sTeileNr.toCharArray();
+
+        for(char n: ziffern){
+            int ziffer = n -'0';
+            zifferAnzahl[ziffer]++;
+        }
+
+        int anzahl0=0, anzahldoppelt =0;
+
+        for (int anzahl : zifferAnzahl){
+            if (anzahl==0)
+                anzahl0++;
+
+            if(anzahl == 2)
+                anzahldoppelt++;
+        }
+
+        if(   (anzahl0 !=1 || anzahldoppelt != 1) )
+            throw new TeilenummerException(sTeileNr,"\n\nDie Teilenummer  " + sTeileNr+"  stimmt nicht");
+
+
+    }catch (TeilenummerException e){
+        taAusgabe.setText("Fehler im Teilenummertest:");
+        taAusgabe.append("\n"+ sTeileNr);
+        taAusgabe.append(e.getMessage());
+        return false;
+    }
+
 
 
         return  true;
