@@ -8,14 +8,27 @@ class MainTest {
 
 
 @Test
-@DisplayName("Teilenummertest")
-@Tag("Teilenummer")
+@DisplayName("Teilenummertest auf True")
+@Tag("TeilenummerTrue")
 
-void testaufTeilenummer(){
-
+void testaufTeilenummer1(){
     Eingabe e = new Eingabe();
 
     assertTrue(e.pruefeTeileNr("1234567889"));
+    assertTrue(e.pruefeTeileNr("1002345689"));
 }
+
+    @Test
+    @DisplayName("Teilenummertest auf False")
+    @Tag("TeilenummerFaLSE")
+
+    void testaufTeilenummer2(){
+        Eingabe e = new Eingabe();
+
+        assertFalse(e.pruefeTeileNr("9876543210"));
+        assertFalse(e.pruefeTeileNr("0123456789"));
+
+
+    }
 
 }

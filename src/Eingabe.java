@@ -1,6 +1,8 @@
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class Eingabe {
     private JPanel jpPanel;
@@ -8,11 +10,13 @@ public class Eingabe {
     private JTextField txtTeilenummer;
     private JButton btnTest;
     private JTextArea taAusgabe;
+    private JList jlListe;
+    private DefaultListModel lmlistModel = new DefaultListModel();
+
 
 
     public Eingabe() {
-
-
+        jlListe.setModel(lmlistModel);
         btnTest.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -25,6 +29,33 @@ public class Eingabe {
                     taAusgabe.append("\n\n" + sTeileNr);
                     taAusgabe.append("\n\n   OK");
 
+                    lmlistModel.clear();
+                    lmlistModel.addElement("Test der Teilenummer ");
+                    lmlistModel.addElement("\n\n" + sTeileNr);
+                    lmlistModel.addElement("\n\n   OK");
+                    System.out.println(lmlistModel);
+                }
+            }
+        });
+        txtTeilenummer.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                super.keyPressed(e);
+                if(e.getKeyCode() == KeyEvent.VK_ENTER)
+                {
+                    String sTeileNr = txtTeilenummer.getText().toString();
+                    if (pruefeTeileNr(sTeileNr) == true){
+
+                        taAusgabe.setText("Test der Teilenummer ");
+                        taAusgabe.append("\n\n" + sTeileNr);
+                        taAusgabe.append("\n\n   OK");
+
+                        lmlistModel.clear();
+                        lmlistModel.addElement("Test der Teilenummer ");
+                        lmlistModel.addElement("\n\n" + sTeileNr);
+                        lmlistModel.addElement("\n\n   OK");
+                        System.out.println(lmlistModel);
+                    }
                 }
             }
         });
@@ -58,19 +89,25 @@ public class Eingabe {
                 anzahldoppelt++;
         }
 
-        if(   (anzahl0 !=1 || anzahldoppelt != 1) )
-            throw new TeilenummerException(sTeileNr,"\n\nDie Teilenummer  " + sTeileNr+"  stimmt nicht");
+        if(   (anzahl0 !=1) )
+            throw new TeilenummerException(sTeileNr,"\n\nDie Teilenummer  " + sTeileNr+"  stimmt nicht.\n Eine Ziffer kommt nicht 0-mal vor.");
 
+        if(   (anzahldoppelt != 1) )
+            throw new TeilenummerException(sTeileNr,"\n\nDie Teilenummer  " + sTeileNr+"  stimmt nicht.\neine ziffer kommt nicht zweimal vor.");
 
     }catch (TeilenummerException e){
         taAusgabe.setText("Fehler im Teilenummertest:");
         taAusgabe.append("\n"+ sTeileNr);
         taAusgabe.append(e.getMessage());
+
+        lmlistModel.clear();
+        lmlistModel.addElement("Fehler im Teilenummertest:");
+        lmlistModel.addElement("\n"+ sTeileNr);
+        lmlistModel.addElement("\n"+e.getMessage());
+        System.out.println(lmlistModel);
+
         return false;
     }
-
-
-
         return  true;
     }
 
